@@ -10,9 +10,9 @@
 name: OpenWrt-tylor76
 
 on:
-  # push:
-  #   branches: 
-  #     - master
+  push:
+    branches: 
+      - master
   # schedule:
   #   - cron: 0 20 * * *
   # release:
@@ -50,6 +50,11 @@ jobs:
           # ln -s /mnt/openwrt/feeds ./feeds
           # ln -s /mnt/openwrt/staging_dir ./staging_dir
           df -h
+      - name: 同步最新的源码
+        run: |
+          git remote add openwrt https://github.com/coolsnowwolf/lede.git
+          git pull openwrt master
+          git remote -v
       - name: Update feeds
         run: |
           ./scripts/feeds update -a
@@ -145,6 +150,13 @@ jobs:
           # CONFIG_PACKAGE_luci-app-webadmin=y
           CONFIG_PACKAGE_luci-app-wireguard=y
           # CONFIG_PACKAGE_luci-app-wrtbwmon=y
+          CONFIG_PACKAGE_luci-app-accesscontrol=y
+          CONFIG_PACKAGE_luci-app-vlmcsd=y
+          CONFIG_PACKAGE_luci-app-aliddns=y
+          CONFIG_PACKAGE_luci-app-gfwlist=y
+          CONFIG_PACKAGE_luci-app-transmission=y
+          CONFIG_PACKAGE_trojan=y
+          smartdns=y
           EOF
           # LuCI主题:
           cat >> .config <<EOF
